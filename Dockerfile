@@ -11,8 +11,8 @@ RUN yum install -y --nogpgcheck shiny-server-1.5.5.872-rh6-x86_64.rpm
 RUN rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
 RUN yum install -y R
 
-RUN R -e 'install.packages(c("shiny", "rmarkdown"), repos = "https://cran.rstudio.com")'
-RUN R -e 'install.packages(c("tidyverse"), repos = "https://cran.rstudio.com")'
+RUN R -e 'install.packages(c("shiny", "rmarkdown"), repos = "https://cloud.r-project.org")'
+RUN R -e 'install.packages("tidyverse", repos = "https://cloud.r-project.org")'
 
 EXPOSE 3838
 
