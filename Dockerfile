@@ -20,5 +20,8 @@ COPY shiny-server.conf /etc/shiny-server/
 
 COPY shiny-server.sh /usr/bin/shiny-server.sh
 
+# running shiny server as shiny user requires write access to /var/lib/shiny-server
+RUN chown -R shiny:shiny /var/lib/shiny-server
+
 CMD ["/usr/bin/shiny-server.sh"]
 
