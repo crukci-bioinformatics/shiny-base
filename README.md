@@ -43,10 +43,12 @@ The application should be available at http://localhost:3838/myapp.
 
 Most Shiny applications will require additional R packages, data files and images. The main purpose of this image is to act as a base from which those Shiny applications can be built.
 
-The following shows an example Dockerfile that creates a directory for the Shiny application within the image and copies the application R code and some images into it.
+The following shows an example Dockerfile that installs an R package needed by the application, creates directories for the Shiny application within the image and copies the application R code and some images into it.
 
 ```
 FROM crukcibioinformatics/shiny-base
+
+RUN R -e 'install.packages("DT", repos = "https://cloud.r-project.org")'
 
 RUN mkdir /srv/shiny-server/myapp
 RUN mkdir /srv/shiny-server/myapp/www
@@ -66,5 +68,7 @@ To deploy the application in detached mode (`-d`), listening on the host's port 
 ```sh
 docker run -u shiny -d -p 80:3838 -v ${PWD}/logs:/var/log/shiny-server myapp
 ```
+
+The application should be available at http://localhost/myapp.
 
 
