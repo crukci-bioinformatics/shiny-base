@@ -36,7 +36,7 @@ For simple Shiny applications that do not require installation of additional R p
 docker run --rm -p 3838:3838 -v ${PWD}/myapp:/srv/shiny-server/myapp -v ${PWD}/logs:/var/log/shiny-server crukcibioinformatics/shiny-base
 ```
 
-The application should be available at http://localhost/myapp.
+The application should be available at http://localhost:3838/myapp.
 
 
 ## Building Docker images for Shiny applications
