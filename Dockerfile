@@ -16,6 +16,10 @@ RUN R -e 'install.packages(c("tidyverse"), repos = "https://cran.rstudio.com")'
 
 EXPOSE 3838
 
+VOLUME /var/log/shiny-server
+
+COPY shiny-server.conf /etc/shiny-server/
+
 COPY shiny-server.sh /usr/bin/shiny-server.sh
 
 # running shiny server as shiny user requires write access to /var/lib/shiny-server
