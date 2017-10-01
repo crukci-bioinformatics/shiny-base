@@ -19,13 +19,13 @@ The Shiny Server test web page should be accessible at http://localhost:3838. Su
 
 ## Logging
 
-Log files are written to /var/log/shiny-server, both for Shiny Server and any installed Shiny applications. A host directory can be mounted within the container, so that these log files are accessible, as follows:
+Log files are written within the container to /var/log/shiny-server; separate files are used for Shiny Server logs and any installed Shiny applications. To write log files to a directory on the host file system, the host directory can be mounted within the container as follows:
 
 ```sh
-mkdir logs
-chmod ugo+rwx logs
 docker run --rm -p 3838:3838 -v ${PWD}/logs:/var/log/shiny-server crukcibioinformatics/shiny-base
 ```
+
+This allows the log files to be accessed from outside the container.
 
 
 ## Running Shiny applications
