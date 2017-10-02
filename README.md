@@ -53,7 +53,7 @@ RUN R -e 'install.packages("DT", repos = "https://cloud.r-project.org")'
 RUN mkdir /srv/shiny-server/myapp
 RUN mkdir /srv/shiny-server/myapp/www
 
-COPY app.R /srv/shiny-server/myapp
+COPY app.R /srv/shiny-server/myapp/
 COPY www/* /srv/shiny-server/myapp/www/
 ```
 
