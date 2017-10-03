@@ -23,7 +23,7 @@ Log files are written within the container to /var/log/shiny-server; separate fi
 
 ```sh
 mkdir -p logs
-chmod ugo+w logs
+chmod ugo+rwx logs
 docker run --rm -p 3838:3838 -v ${PWD}/logs:/var/log/shiny-server crukcibioinformatics/shiny-base
 ```
 
