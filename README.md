@@ -1,7 +1,7 @@
 Base Docker image for Shiny applications
 ========================================
 
-Dockerfile used to create an image for deploying R/Shiny applications using Shiny Server. Intended as a base image on which Shiny applications can be built. Includes shiny and tidyverse R packages and a Shiny Server configuration file that disables some network protocols that seem to cause problems with deployment behind a proxy server.
+Dockerfile used to create an image for deploying R/Shiny applications using Shiny Server. Intended as a base image on which Shiny applications can be built. Includes shiny and tidyverse R packages.
 
 The image is available on [Docker Hub](https://hub.docker.com/r/crukcibioinformatics/shiny-base/).
 
@@ -11,10 +11,12 @@ The image is available on [Docker Hub](https://hub.docker.com/r/crukcibioinforma
 To run a Shiny Server instance with no applications installed within a temporary container:
 
 ```sh
-docker run --rm -p 3838:3838 crukcibioinformatics/shiny-base
+docker run -p 3838:3838 crukcibioinformatics/shiny-base
 ```
 
 The Shiny Server test web page should be accessible at http://localhost:3838. Substitute localhost with the actual host name if not running locally.
+
+Shiny server runs on port 3838 by default and the -p option must be used to publish the port used within the container to the host.
 
 
 ## Logging
@@ -24,18 +26,58 @@ Log files are written within the container to /var/log/shiny-server; separate fi
 ```sh
 mkdir -p logs
 chmod ugo+rwx logs
-docker run --rm -p 3838:3838 -v ${PWD}/logs:/var/log/shiny-server crukcibioinformatics/shiny-base
+docker run -p 3838:3838 -v ${PWD}/logs:/var/log/shiny-server crukcibioinformatics/shiny-base
 ```
 
-This allows the log files to be accessed from outside the container.
+This allows the log files to be accessible from outside the container.
 
 
-## Running Shiny applications
+## Configuring Shiny Server
 
-For simple Shiny applications that do not require installation of additional R packages, it is possible to run those applications using this image by mounting the host directory containing the application R code within the container.
+Shiny Server can be configured by creating a configuration file and using this in place of the default one installed in the Docker container in /etc/shiny-server/shiny-server.conf.
+
+For example, in the following configuration file some network protocols that may cause problems with deployment behind a proxy server have been disabled.
+
+```
+# Instruct Shiny Server to run applications as the user "shiny"
+run_as shiny;
+
+# Define a server that listens on port 3838
+server {
+  listen 3838;
+
+  # Define a location at the base URL
+  location / {
+
+    # Host the directory of Shiny Apps stored in this directory
+    site_dir /srv/shiny-server;
+
+    # Log all Shiny output to files in this directory
+    log_dir /var/log/shiny-server;
+
+    # When a user visits the base URL rather than a particular application,
+    # an index of the applications available in this directory will be shown.
+    directory_index on;
+
+    # disable some network protocols that seem to be causing issues with deployment behind a proxy server
+    disable_protocols xdr-streaming xhr-streaming iframe-eventsource iframe-htmlfile;
+  }
+}
+```
+
+Assuming the configuration file is named shiny-server.conf, the following will deploy the Shiny Server using this configuration:
 
 ```sh
-docker run --rm -p 3838:3838 -v ${PWD}/myapp:/srv/shiny-server/myapp -v ${PWD}/logs:/var/log/shiny-server crukcibioinformatics/shiny-base
+docker run -p 8080:8080 -v ${PWD}/shiny-server.conf:/etc/shiny-server/shiny-server.conf -v ${PWD}/logs:/var/log/shiny-server crukcibioinformatics/shiny-base
+```
+
+
+## Deploying Shiny applications
+
+For simple Shiny applications that do not require installation of additional R packages, it is possible to deploy those applications within a Shiny Server using this image by mounting the host directory containing the application R code within the container.
+
+```sh
+docker run -p 3838:3838 -v ${PWD}/myapp:/srv/shiny-server/myapp -v ${PWD}/logs:/var/log/shiny-server crukcibioinformatics/shiny-base
 ```
 
 The application should be available at http://localhost:3838/myapp.
