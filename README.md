@@ -3,8 +3,6 @@ Base Docker image for Shiny applications
 
 Dockerfile used to create an image for deploying R/Shiny applications using Shiny Server. Intended as a base image on which Shiny applications can be built. Includes shiny and tidyverse R packages.
 
-The image is available on [Docker Hub](https://hub.docker.com/r/crukcibioinformatics/shiny-base/).
-
 
 ## Building the Docker image
 
@@ -12,6 +10,15 @@ To build the Docker image run the following command within the directory contain
 
 ```
 docker build --tag="crukcibioinformatics/shiny-base" .
+```
+
+
+## Obtaining a pre-built image
+
+Alternatively, a pre-built image can be obtained from [Docker Hub](https://hub.docker.com/r/crukcibioinformatics/shiny-base/) as follows:
+
+```
+docker pull crukcibioinformatics/shiny-base
 ```
 
 
