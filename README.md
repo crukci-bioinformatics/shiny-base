@@ -47,6 +47,13 @@ the Docker container can be changed using the `-p` option, for example:
 docker run -p 8080:3838 crukcibioinformatics/shiny-base
 ```
 
+To deploy the Shiny Server in detached mode (`-d`) and running more securely
+within the container as the shiny user instead of root:
+
+```
+docker run -u shiny -d -p 8080:3838 crukcibioinformatics/shiny-base
+```
+
 
 ## Logging
 
