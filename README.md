@@ -32,7 +32,11 @@ docker run -p 3838:3838 crukcibioinformatics/shiny-base
 
 The Shiny Server test web page should be accessible at http://localhost:3838. Substitute localhost with the actual host name if not running locally.
 
-Shiny server runs on port 3838 by default and the -p option must be used to publish the port used within the container to the host.
+Shiny server runs on port 3838 by default and the `-p` option must be used to publish the port used within the container to the host. The port exposed through the Docker container can be changed using the `-p` option, for example:
+
+```
+docker run -p 8080:3838 crukcibioinformatics/shiny-base
+```
 
 
 ## Logging
