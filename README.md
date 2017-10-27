@@ -6,7 +6,7 @@ using Shiny Server. Intended as a base image on which Shiny applications can be
 built. Includes shiny and tidyverse R packages.
 
 
-## Building the Docker image
+### Building the Docker image
 
 To build the Docker image run the following command within the directory
 containing the Dockerfile:
@@ -16,7 +16,7 @@ docker build --tag="crukcibioinformatics/shiny-base" .
 ```
 
 
-## Obtaining a pre-built image
+### Obtaining a pre-built image
 
 Alternatively, a pre-built image can be obtained from
 [Docker Hub](https://hub.docker.com/r/crukcibioinformatics/shiny-base/)
@@ -27,7 +27,7 @@ docker pull crukcibioinformatics/shiny-base
 ```
 
 
-## Usage
+### Usage
 
 To run a Shiny Server instance with no applications installed within a temporary
 container:
@@ -55,7 +55,7 @@ docker run -u shiny -d -p 8080:3838 crukcibioinformatics/shiny-base
 ```
 
 
-## Logging
+### Logging
 
 Log files are written within the container to `/var/log/shiny-server`. Separate
 files are used for Shiny Server logs and any installed Shiny applications. To
@@ -71,7 +71,7 @@ docker run -p 3838:3838 -v ${PWD}/logs:/var/log/shiny-server crukcibioinformatic
 This allows the log files to be accessible from outside the container.
 
 
-## Configuring Shiny Server
+### Configuring Shiny Server
 
 Shiny Server can be configured by creating a configuration file and using this
 in place of the default one installed in the Docker container in
@@ -115,7 +115,7 @@ docker run -p 8080:8080 -v ${PWD}/shiny-server.conf:/etc/shiny-server/shiny-serv
 ```
 
 
-## Deploying Shiny applications
+### Deploying Shiny applications
 
 For simple Shiny applications that do not require installation of additional R
 packages, it is possible to deploy those applications within a Shiny Server
@@ -129,7 +129,7 @@ docker run -p 3838:3838 -v ${PWD}/myapp:/srv/shiny-server/myapp -v ${PWD}/logs:/
 The application should be available at http://localhost:3838/myapp.
 
 
-## Building Docker images for Shiny applications
+### Building Docker images for Shiny applications
 
 Most Shiny applications will require additional R packages, data files and
 images. The main purpose of this image is to act as a base from which those
