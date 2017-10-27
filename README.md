@@ -6,11 +6,20 @@ Dockerfile used to create an image for deploying R/Shiny applications using Shin
 The image is available on [Docker Hub](https://hub.docker.com/r/crukcibioinformatics/shiny-base/).
 
 
+## Building the Docker image
+
+To build the Docker image run the following command within the directory containing the Dockerfile:
+
+```
+docker build --tag="crukcibioinformatics/shiny-base" .
+```
+
+
 ## Usage
 
 To run a Shiny Server instance with no applications installed within a temporary container:
 
-```sh
+```
 docker run -p 3838:3838 crukcibioinformatics/shiny-base
 ```
 
@@ -23,7 +32,7 @@ Shiny server runs on port 3838 by default and the -p option must be used to publ
 
 Log files are written within the container to /var/log/shiny-server; separate files are used for Shiny Server logs and any installed Shiny applications. To write log files to a directory on the host file system, the host directory can be mounted within the container as follows:
 
-```sh
+```
 mkdir -p logs
 chmod ugo+rwx logs
 docker run -p 3838:3838 -v ${PWD}/logs:/var/log/shiny-server crukcibioinformatics/shiny-base
@@ -67,7 +76,7 @@ server {
 
 Assuming the configuration file is named shiny-server.conf, the following will deploy the Shiny Server using this configuration:
 
-```sh
+```
 docker run -p 8080:8080 -v ${PWD}/shiny-server.conf:/etc/shiny-server/shiny-server.conf -v ${PWD}/logs:/var/log/shiny-server crukcibioinformatics/shiny-base
 ```
 
@@ -76,7 +85,7 @@ docker run -p 8080:8080 -v ${PWD}/shiny-server.conf:/etc/shiny-server/shiny-serv
 
 For simple Shiny applications that do not require installation of additional R packages, it is possible to deploy those applications within a Shiny Server using this image by mounting the host directory containing the application R code within the container.
 
-```sh
+```
 docker run -p 3838:3838 -v ${PWD}/myapp:/srv/shiny-server/myapp -v ${PWD}/logs:/var/log/shiny-server crukcibioinformatics/shiny-base
 ```
 
@@ -103,13 +112,13 @@ COPY www/* /srv/shiny-server/myapp/www/
 
 This can be built using `docker build` in the usual way:
 
-```sh
+```
 docker build --tag=myapp .
 ```
 
 To deploy the application in detached mode (`-d`), listening on the host's port 80 (`-p 80:3838`) and running more securely within the container as the shiny user instead of root:
 
-```sh
+```
 docker run -u shiny -d -p 80:3838 -v ${PWD}/logs:/var/log/shiny-server myapp
 ```
 
