@@ -142,7 +142,7 @@ and copies the application R code and some images into it.
 ```
 FROM crukcibioinformatics/shiny-base
 
-RUN R -e 'install.packages("DT", repos = "https://cloud.r-project.org")'
+RUN R -e 'install.packages("gamlss", repos = "https://cloud.r-project.org")'
 
 RUN mkdir /srv/shiny-server/myapp
 RUN mkdir /srv/shiny-server/myapp/www
