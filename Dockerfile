@@ -11,7 +11,7 @@ RUN yum update -y
 
 RUN yum install -y R
 
-RUN R -e 'install.packages(c("shiny", "shinyjs", "rmarkdown"), repos = "https://cloud.r-project.org")'
+RUN R -e 'install.packages(c("shiny", "shinyjs", "rmarkdown", "colourpicker"), repos = "https://cloud.r-project.org")'
 RUN R -e 'install.packages("tidyverse", repos = "https://cloud.r-project.org")'
 RUN R -e 'install.packages("DT", repos = "https://cloud.r-project.org")'
 
