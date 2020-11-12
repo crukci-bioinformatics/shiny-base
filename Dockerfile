@@ -1,23 +1,35 @@
-FROM centos:7
+FROM centos:8
 
 MAINTAINER Matt Eldridge "matthew.eldridge@cruk.cam.ac.uk"
 
-RUN yum groupinstall -y 'development tools'
-RUN yum install -y libxml2-devel libcurl-devel openssl-devel
-RUN yum install -y wget
+# install English language pack to prevent language/locale issues
+RUN dnf -y install glibc-langpack-en
 
-RUN yum install -y epel-release
-RUN yum update -y
+# additional packages from EPEL
+RUN dnf -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
 
-RUN yum install -y R
+# enable PowerTools as recommended in EPEL wiki
+RUN dnf -y install dnf-plugins-core
+RUN dnf config-manager --set-enabled PowerTools
 
+# install development tools and various development libraries
+RUN dnf -y groupinstall 'development tools'
+RUN dnf -y install libxml2-devel libcurl-devel openssl-devel
+RUN dnf -y install zlib-devel bzip2-devel xz-devel
+RUN dnf -y install libpng-devel
+
+# install Shiny server
+RUN dnf -y install https://download3.rstudio.org/centos6.3/x86_64/shiny-server-1.5.15.953-x86_64.rpm
+
+# install R
+RUN dnf -y install https://cdn.rstudio.com/r/centos-8/pkgs/R-4.0.3-1-1.x86_64.rpm
+RUN ln -s /opt/R/4.0.3/bin/R /usr/local/bin/R
+RUN ln -s /opt/R/4.0.3/bin/Rscript /usr/local/bin/Rscript
+
+# install R packages
 RUN R -e 'install.packages(c("shiny", "shinyjs", "rmarkdown", "colourpicker"), repos = "https://cloud.r-project.org")'
 RUN R -e 'install.packages("tidyverse", repos = "https://cloud.r-project.org")'
 RUN R -e 'install.packages("DT", repos = "https://cloud.r-project.org")'
-
-RUN wget https://download3.rstudio.org/centos6.3/x86_64/shiny-server-1.5.13.943-x86_64.rpm
-RUN yum install -y --nogpgcheck shiny-server-1.5.13.943-x86_64.rpm
-RUN rm shiny-server-1.5.13.943-x86_64.rpm
 
 EXPOSE 3838
 
