@@ -10,7 +10,7 @@ RUN dnf -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.n
 
 # enable PowerTools as recommended in EPEL wiki
 RUN dnf -y install dnf-plugins-core
-RUN dnf config-manager --set-enabled PowerTools
+RUN dnf config-manager --set-enabled powertools
 
 # install development tools and various development libraries
 RUN dnf -y groupinstall 'development tools'
