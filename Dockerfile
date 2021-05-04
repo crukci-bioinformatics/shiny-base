@@ -1,4 +1,4 @@
-FROM centos:8
+FROM centos:8.3.2011
 
 MAINTAINER Matt Eldridge "matthew.eldridge@cruk.cam.ac.uk"
 
@@ -18,16 +18,20 @@ RUN dnf -y install libxml2-devel libcurl-devel openssl-devel
 RUN dnf -y install zlib-devel bzip2-devel xz-devel
 RUN dnf -y install libpng-devel
 
-# install Shiny server
-RUN dnf -y install https://download3.rstudio.org/centos6.3/x86_64/shiny-server-1.5.15.953-x86_64.rpm
-
 # install R
-RUN dnf -y install https://cdn.rstudio.com/r/centos-8/pkgs/R-4.0.3-1-1.x86_64.rpm
-RUN ln -s /opt/R/4.0.3/bin/R /usr/local/bin/R
-RUN ln -s /opt/R/4.0.3/bin/Rscript /usr/local/bin/Rscript
+ARG R_VERSION=4.0.4
+RUN dnf -y install https://cdn.rstudio.com/r/centos-8/pkgs/R-${R_VERSION}-1-1.x86_64.rpm
+RUN ln -s /opt/R/${R_VERSION}/bin/R /usr/local/bin/R
+RUN ln -s /opt/R/${R_VERSION}/bin/Rscript /usr/local/bin/Rscript
 
-# install R packages
-RUN R -e 'install.packages(c("shiny", "shinyjs", "rmarkdown", "colourpicker"), repos = "https://cloud.r-project.org")'
+# install Shiny package
+RUN R -e 'install.packages("shiny", repos = "https://cran.rstudio.com")'
+
+# install Shiny server
+RUN dnf -y install https://download3.rstudio.org/centos7/x86_64/shiny-server-1.5.17.960-x86_64.rpm
+
+# install additional R packages
+RUN R -e 'install.packages(c("shinyjs", "rmarkdown", "colourpicker"), repos = "https://cloud.r-project.org")'
 RUN R -e 'install.packages("tidyverse", repos = "https://cloud.r-project.org")'
 RUN R -e 'install.packages("DT", repos = "https://cloud.r-project.org")'
 
