@@ -19,7 +19,7 @@ RUN dnf -y install zlib-devel bzip2-devel xz-devel
 RUN dnf -y install libpng-devel
 
 # install R
-ARG R_VERSION=4.0.4
+ARG R_VERSION=4.1.0
 RUN dnf -y install https://cdn.rstudio.com/r/centos-8/pkgs/R-${R_VERSION}-1-1.x86_64.rpm
 RUN ln -s /opt/R/${R_VERSION}/bin/R /usr/local/bin/R
 RUN ln -s /opt/R/${R_VERSION}/bin/Rscript /usr/local/bin/Rscript
@@ -33,6 +33,7 @@ RUN dnf -y install https://download3.rstudio.org/centos7/x86_64/shiny-server-1.5
 # install additional R packages
 RUN R -e 'install.packages(c("shinyjs", "rmarkdown", "colourpicker"), repos = "https://cloud.r-project.org")'
 RUN R -e 'install.packages("tidyverse", repos = "https://cloud.r-project.org")'
+RUN R -e 'install.packages("plotly", repos = "https://cloud.r-project.org")'
 RUN R -e 'install.packages("DT", repos = "https://cloud.r-project.org")'
 
 EXPOSE 3838
