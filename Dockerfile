@@ -27,6 +27,7 @@ RUN rm shiny-server-${SHINY_SERVER_VERSION}.deb
 # install R packages
 RUN R -e 'install.packages("shiny", repos = "https://cloud.r-project.org")'
 RUN R -e 'install.packages("shinyjs", repos = "https://cloud.r-project.org")'
+RUN R -e 'install.packages("bslib", repos = "https://cloud.r-project.org")'
 RUN R -e 'install.packages("rmarkdown", repos = "https://cloud.r-project.org")'
 RUN R -e 'install.packages("colourpicker", repos = "https://cloud.r-project.org")'
 RUN R -e 'install.packages("tidyverse", repos = "https://cloud.r-project.org")'
