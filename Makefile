@@ -26,7 +26,6 @@ shell:
 		crukcibioinformatics/shiny-base:${version}
 
 start:
-	rm -rf logs
 	mkdir -p logs lib/bookmarks/shiny apps
 	chmod -R ugo+rwx lib logs
 	docker run \
