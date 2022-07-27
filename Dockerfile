@@ -34,6 +34,7 @@ RUN R -e 'install.packages("tidyverse", repos = "https://cloud.r-project.org")'
 RUN R -e 'install.packages("plotly", repos = "https://cloud.r-project.org")'
 RUN R -e 'install.packages("patchwork", repos = "https://cloud.r-project.org")'
 RUN R -e 'install.packages("DT", repos = "https://cloud.r-project.org")'
+RUN R -e 'install.packages("RSQLite", repos = "https://cloud.r-project.org")'
 
 # ensure the user account that is running the shiny server process has write privilege for /var/lib/shiny-server
 RUN chmod ugo+rwx /var/lib/shiny-server
