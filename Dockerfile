@@ -1,22 +1,12 @@
-FROM debian:11.3-slim
-  
-MAINTAINER Matt Eldridge "matthew.eldridge@cruk.cam.ac.uk"
+FROM debian:11.6-slim
+ 
+LABEL authors="Matt Eldridge" \
+      version="1.1" \
+      description="Base Docker image for Shiny applications"
 
-RUN apt-get update
-RUN apt-get install -y build-essential
-RUN apt-get install -y libxml2-dev
-RUN apt-get install -y libssl-dev
-RUN apt-get install -y curl
-RUN apt-get install -y gdebi-core
-RUN apt-get clean
-
-# install R (https://docs.rstudio.com/resources/install-r)
-ARG R_VERSION=4.2.0
-RUN curl -O https://cdn.rstudio.com/r/debian-11/pkgs/r-${R_VERSION}_1_amd64.deb
-RUN gdebi -n r-${R_VERSION}_1_amd64.deb
-RUN rm r-${R_VERSION}_1_amd64.deb
-RUN ln -s /opt/R/${R_VERSION}/bin/R /usr/local/bin/R
-RUN ln -s /opt/R/${R_VERSION}/bin/Rscript /usr/local/bin/Rscript
+RUN apt-get update && \
+    apt-get install -y curl gdebi-core && \
+    apt-get clean
 
 # install Shiny server (https://www.rstudio.com/products/shiny/download-server/ubuntu)
 ARG SHINY_SERVER_VERSION=1.5.18.987-amd64
@@ -24,20 +14,24 @@ RUN curl -O https://download3.rstudio.org/ubuntu-18.04/x86_64/shiny-server-${SHI
 RUN gdebi -n shiny-server-${SHINY_SERVER_VERSION}.deb
 RUN rm shiny-server-${SHINY_SERVER_VERSION}.deb
 
-# install R packages
-RUN R -e 'install.packages("shiny", repos = "https://cloud.r-project.org")'
-RUN R -e 'install.packages("shinyjs", repos = "https://cloud.r-project.org")'
-RUN R -e 'install.packages("bslib", repos = "https://cloud.r-project.org")'
-RUN R -e 'install.packages("rmarkdown", repos = "https://cloud.r-project.org")'
-RUN R -e 'install.packages("colourpicker", repos = "https://cloud.r-project.org")'
-RUN R -e 'install.packages("tidyverse", repos = "https://cloud.r-project.org")'
-RUN R -e 'install.packages("plotly", repos = "https://cloud.r-project.org")'
-RUN R -e 'install.packages("patchwork", repos = "https://cloud.r-project.org")'
-RUN R -e 'install.packages("DT", repos = "https://cloud.r-project.org")'
-RUN R -e 'install.packages("RSQLite", repos = "https://cloud.r-project.org")'
-
 # ensure the user account that is running the shiny server process has write privilege for /var/lib/shiny-server
 RUN chmod ugo+rwx /var/lib/shiny-server
+
+ARG CONDA_VERSION=py310_23.1.0-1
+ARG CONDA_SHA256=32d73e1bc33fda089d7cd9ef4c1be542616bd8e437d1f77afeeaf7afdb019787
+
+RUN curl https://repo.anaconda.com/miniconda/Miniconda3-${CONDA_VERSION}-Linux-x86_64.sh -o miniconda3.sh && \
+    echo "${CONDA_SHA256}  miniconda3.sh" > miniconda3.sha256 && \
+    sha256sum -c miniconda3.sha256 && \
+    mkdir -p /opt && \
+    sh miniconda3.sh -b -p /opt/conda && \
+    rm miniconda3.sh miniconda3.sha256
+
+COPY conda.yml .
+
+RUN /opt/conda/bin/conda env create -f conda.yml && /opt/conda/bin/conda clean -a
+
+ENV PATH /opt/conda/envs/shiny_base/bin:$PATH
 
 # expose port that Shiny server listens on (can be mapped to another port on the host)
 EXPOSE 3838
