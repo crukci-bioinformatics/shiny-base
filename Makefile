@@ -43,3 +43,15 @@ start:
 stop:
 	docker stop shiny_server
 
+start_singularity:
+	mkdir -p logs lib/bookmarks/shiny apps
+	chmod -R ugo+rwx lib logs
+	sed "s/run_as shiny/run_as ${USER}/;s/3838/8080/" shiny-server.conf > shiny-server.singularity.conf
+	singularity run \
+		--cleanenv \
+		--bind shiny-server.singularity.conf:/etc/shiny-server/shiny-server.conf \
+		--bind lib:/var/lib/shiny-server \
+		--bind logs:/var/log/shiny-server \
+		--bind apps:/srv/shiny-server/apps \
+		shiny-base-${version}.sif
+
