@@ -17,3 +17,4 @@ dependencies:
   - conda-forge::r-colorspace=2.1_0
   - conda-forge::r-crosstalk=1.2.0
   - conda-forge::r-patchwork=1.1.2
+  - conda-forge::r-openxlsx=4.2.5.2
