@@ -9,7 +9,7 @@ RUN apt-get update && \
     apt-get clean
 
 # install Shiny server (https://www.rstudio.com/products/shiny/download-server/ubuntu)
-ARG SHINY_SERVER_VERSION=1.5.18.987-amd64
+ARG SHINY_SERVER_VERSION=1.5.21.1012-amd64
 RUN curl -O https://download3.rstudio.org/ubuntu-18.04/x86_64/shiny-server-${SHINY_SERVER_VERSION}.deb
 RUN gdebi -n shiny-server-${SHINY_SERVER_VERSION}.deb
 RUN rm shiny-server-${SHINY_SERVER_VERSION}.deb
@@ -17,8 +17,8 @@ RUN rm shiny-server-${SHINY_SERVER_VERSION}.deb
 # ensure the user account that is running the shiny server process has write privilege for /var/lib/shiny-server
 RUN chmod ugo+rwx /var/lib/shiny-server
 
-ARG CONDA_VERSION=py310_23.1.0-1
-ARG CONDA_SHA256=32d73e1bc33fda089d7cd9ef4c1be542616bd8e437d1f77afeeaf7afdb019787
+ARG CONDA_VERSION=py311_23.11.0-2
+ARG CONDA_SHA256=c9ae82568e9665b1105117b4b1e499607d2a920f0aea6f94410e417a0eff1b9c
 
 RUN curl https://repo.anaconda.com/miniconda/Miniconda3-${CONDA_VERSION}-Linux-x86_64.sh -o miniconda3.sh && \
     echo "${CONDA_SHA256}  miniconda3.sh" > miniconda3.sha256 && \
