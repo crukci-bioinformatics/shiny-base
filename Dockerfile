@@ -1,7 +1,7 @@
 FROM debian:12.12-slim
  
 LABEL authors="Matt Eldridge" \
-      version="1.3" \
+      version="1.4-snapshot" \
       description="Base Docker image for Shiny applications"
 
 RUN apt-get update && \
